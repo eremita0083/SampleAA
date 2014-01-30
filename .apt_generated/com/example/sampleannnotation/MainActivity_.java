@@ -37,6 +37,7 @@ public final class MainActivity_
     }
 
     private void init_(Bundle savedInstanceState) {
+        myPrefs = new MyPrefs_(this);
         OnViewChangedNotifier.registerOnViewChangedListener(this);
     }
 
@@ -70,21 +71,6 @@ public final class MainActivity_
     public void onViewChanged(HasViews hasViews) {
         textView = ((TextView) hasViews.findViewById(id.textView));
         {
-            View view = hasViews.findViewById(id.button);
-            if (view!= null) {
-                view.setOnClickListener(new OnClickListener() {
-
-
-                    @Override
-                    public void onClick(View view) {
-                        MainActivity_.this.button();
-                    }
-
-                }
-                );
-            }
-        }
-        {
             View view = hasViews.findViewById(id.toNextButton);
             if (view!= null) {
                 view.setOnClickListener(new OnClickListener() {
@@ -93,6 +79,21 @@ public final class MainActivity_
                     @Override
                     public void onClick(View view) {
                         MainActivity_.this.toNextButton();
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            View view = hasViews.findViewById(id.button);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        MainActivity_.this.button();
                     }
 
                 }

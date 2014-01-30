@@ -4,6 +4,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import android.app.Activity;
 import android.widget.TextView;
@@ -32,11 +33,39 @@ public class MainActivity extends Activity {
 		textView.setText("ハローワールド");
 	}
 	
+	//shared prefのAA
+	@Pref
+    MyPrefs_ myPrefs;
+
+	
 	//クリックしたら次のアクティビティへ
 	@Click
 	void toNextButton(){
 		//Intent .textはNextActivityのメンバ変数に@Extraをつけている。
 		new NextActivity_.IntentBuilder_(this).text(textView.getText().toString()).start();
+		
+		//spのnameにジョンを上書きする。
+		myPrefs.name().put("John");
+		
+		//spのバッチ処理。editではじめ、関数名、put、関数名,put,,,,, .apply()で占める。
+		myPrefs.edit()
+		  .name()
+		  .put("John")
+		  .age()
+		  .put(42)
+		  .apply();
+		
+		// myPrefs.clear();　で消去
+		
+		// 値が存在するか確認する:
+		boolean nameExists = myPrefs.name().exists();
+
+		// 値を取得する
+		long lastUpdated = myPrefs.lastUpdated().get();
+
+		// 値を読み取り、その値がない場合はgetOrの引数が帰ってくる。
+		long now = System.currentTimeMillis();
+		long longlast = myPrefs.lastUpdated().getOr(now);
 	}
 	
 	//@viewbyIdが読み込まれた後に呼び出される。
