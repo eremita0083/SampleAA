@@ -8,8 +8,8 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="libs/androidannotations-api-3.0.1.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="libs/androidannotations-api-3.0.1.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 import com.example.sampleannnotation.R.id;
@@ -20,12 +19,13 @@ import org.androidannotations.api.view.HasViews;
 import org.androidannotations.api.view.OnViewChangedListener;
 import org.androidannotations.api.view.OnViewChangedNotifier;
 
-public final class MainActivity_
-    extends MainActivity
+public final class NextActivity_
+    extends NextActivity
     implements HasViews, OnViewChangedListener
 {
 
     private final OnViewChangedNotifier onViewChangedNotifier_ = new OnViewChangedNotifier();
+    public final static String TEXT_EXTRA = "text";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,11 +33,12 @@ public final class MainActivity_
         init_(savedInstanceState);
         super.onCreate(savedInstanceState);
         OnViewChangedNotifier.replaceNotifier(previousNotifier);
-        setContentView(layout.activity_main);
+        setContentView(layout.activity_next);
     }
 
     private void init_(Bundle savedInstanceState) {
         OnViewChangedNotifier.registerOnViewChangedListener(this);
+        injectExtras_();
     }
 
     @Override
@@ -58,48 +59,33 @@ public final class MainActivity_
         onViewChangedNotifier_.notifyViewChanged(this);
     }
 
-    public static MainActivity_.IntentBuilder_ intent(Context context) {
-        return new MainActivity_.IntentBuilder_(context);
+    public static NextActivity_.IntentBuilder_ intent(Context context) {
+        return new NextActivity_.IntentBuilder_(context);
     }
 
-    public static MainActivity_.IntentBuilder_ intent(Fragment supportFragment) {
-        return new MainActivity_.IntentBuilder_(supportFragment);
+    public static NextActivity_.IntentBuilder_ intent(Fragment supportFragment) {
+        return new NextActivity_.IntentBuilder_(supportFragment);
     }
 
     @Override
     public void onViewChanged(HasViews hasViews) {
-        textView = ((TextView) hasViews.findViewById(id.textView));
-        {
-            View view = hasViews.findViewById(id.button);
-            if (view!= null) {
-                view.setOnClickListener(new OnClickListener() {
+        text_next = ((TextView) hasViews.findViewById(id.text_next));
+        displayText();
+    }
 
-
-                    @Override
-                    public void onClick(View view) {
-                        MainActivity_.this.button();
-                    }
-
-                }
-                );
+    private void injectExtras_() {
+        Bundle extras_ = getIntent().getExtras();
+        if (extras_!= null) {
+            if (extras_.containsKey(TEXT_EXTRA)) {
+                text = extras_.getString(TEXT_EXTRA);
             }
         }
-        {
-            View view = hasViews.findViewById(id.toNextButton);
-            if (view!= null) {
-                view.setOnClickListener(new OnClickListener() {
+    }
 
-
-                    @Override
-                    public void onClick(View view) {
-                        MainActivity_.this.toNextButton();
-                    }
-
-                }
-                );
-            }
-        }
-        makeToast();
+    @Override
+    public void setIntent(Intent newIntent) {
+        super.setIntent(newIntent);
+        injectExtras_();
     }
 
     public static class IntentBuilder_ {
@@ -110,20 +96,20 @@ public final class MainActivity_
 
         public IntentBuilder_(Context context) {
             context_ = context;
-            intent_ = new Intent(context, MainActivity_.class);
+            intent_ = new Intent(context, NextActivity_.class);
         }
 
         public IntentBuilder_(Fragment fragment) {
             fragmentSupport_ = fragment;
             context_ = fragment.getActivity();
-            intent_ = new Intent(context_, MainActivity_.class);
+            intent_ = new Intent(context_, NextActivity_.class);
         }
 
         public Intent get() {
             return intent_;
         }
 
-        public MainActivity_.IntentBuilder_ flags(int flags) {
+        public NextActivity_.IntentBuilder_ flags(int flags) {
             intent_.setFlags(flags);
             return this;
         }
@@ -142,6 +128,11 @@ public final class MainActivity_
                     context_.startActivity(intent_);
                 }
             }
+        }
+
+        public NextActivity_.IntentBuilder_ text(String text) {
+            intent_.putExtra(TEXT_EXTRA, text);
+            return this;
         }
 
     }
