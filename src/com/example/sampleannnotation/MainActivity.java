@@ -47,7 +47,7 @@ public class MainActivity extends Activity {
 		//spのnameにジョンを上書きする。
 		myPrefs.name().put("John");
 		
-		//spのバッチ処理。editではじめ、関数名、put、関数名,put,,,,, .apply()で占める。
+		//spのバッチ処理。editではじめ、関数名、put、関数名,put,,,,, .apply()でコミット。
 		myPrefs.edit()
 		  .name()
 		  .put("John")

@@ -9,16 +9,19 @@ import org.androidannotations.annotations.sharedpreferences.SharedPref;
 @SharedPref(value = SharedPref.Scope.UNIQUE)
 public interface MyPrefs {
 
+	//stringのリソースで初期化
 	@DefaultRes(R.string.hello_world)
 	String resourceHello();
 	
+	//Johnで初期化
 	@DefaultString("John")
     String name();
 
+	//42で初期化
 	@DefaultInt(42)
     int age();
 	
-	// The field lastUpdated will have default value 0
+	// 何も書かない場合はデふぉが０
 	long lastUpdated();
 	
 }
