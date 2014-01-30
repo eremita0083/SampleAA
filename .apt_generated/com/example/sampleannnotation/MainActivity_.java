@@ -13,6 +13,9 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import com.example.sampleannnotation.R.id;
 import com.example.sampleannnotation.R.layout;
@@ -69,7 +72,13 @@ public final class MainActivity_
 
     @Override
     public void onViewChanged(HasViews hasViews) {
+        prefAgeTextView = ((TextView) hasViews.findViewById(id.prefAgeTextView));
+        ageRadioButton = ((RadioButton) hasViews.findViewById(id.ageRadioButton));
+        prefEditText = ((EditText) hasViews.findViewById(id.prefEditText));
+        nameRadioButton = ((RadioButton) hasViews.findViewById(id.nameRadioButton));
+        prefNameTextView = ((TextView) hasViews.findViewById(id.prefNameTextView));
         textView = ((TextView) hasViews.findViewById(id.textView));
+        myRadioGroup = ((RadioGroup) hasViews.findViewById(id.myRadioGroup));
         {
             View view = hasViews.findViewById(id.button);
             if (view!= null) {
@@ -79,6 +88,21 @@ public final class MainActivity_
                     @Override
                     public void onClick(View view) {
                         MainActivity_.this.button();
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            View view = hasViews.findViewById(id.savePrefButton);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        MainActivity_.this.savePref();
                     }
 
                 }
@@ -100,7 +124,7 @@ public final class MainActivity_
                 );
             }
         }
-        makeToast();
+        afterViews();
     }
 
     public static class IntentBuilder_ {

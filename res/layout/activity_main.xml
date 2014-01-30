@@ -3,24 +3,84 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:padding="4dp">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
-    
-    <Button 
+
+    <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="btn"/>
-    
-    <Button 
+        android:text="btn" />
+
+    <Button
         android:id="@+id/toNextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="toNext"/>
+        android:layout_marginBottom="12dp"
+        android:text="toNext" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/border"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/prefNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="pref name" />
+
+        <TextView
+            android:id="@+id/prefAgeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="pref age" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/prefEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:inputType="text"
+        android:ems="10"
+        android:hint="shared prefに保存するword" />
+
+    <Button
+        android:id="@+id/savePrefButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="shared prefに保存" />
+
+    <RadioGroup
+        android:id="@+id/myRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/nameRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="name" />
+
+        <RadioButton
+            android:id="@+id/ageRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="age" />
+    </RadioGroup>
 
 </LinearLayout>
