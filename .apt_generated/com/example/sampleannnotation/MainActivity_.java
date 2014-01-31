@@ -9,6 +9,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +21,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import com.example.sampleannnotation.R.id;
 import com.example.sampleannnotation.R.layout;
+import org.androidannotations.api.BackgroundExecutor;
 import org.androidannotations.api.view.HasViews;
 import org.androidannotations.api.view.OnViewChangedListener;
 import org.androidannotations.api.view.OnViewChangedNotifier;
@@ -29,6 +32,7 @@ public final class MainActivity_
 {
 
     private final OnViewChangedNotifier onViewChangedNotifier_ = new OnViewChangedNotifier();
+    private Handler handler_ = new Handler(Looper.getMainLooper());
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,27 +77,12 @@ public final class MainActivity_
     @Override
     public void onViewChanged(HasViews hasViews) {
         prefAgeTextView = ((TextView) hasViews.findViewById(id.prefAgeTextView));
-        ageRadioButton = ((RadioButton) hasViews.findViewById(id.ageRadioButton));
-        prefEditText = ((EditText) hasViews.findViewById(id.prefEditText));
         nameRadioButton = ((RadioButton) hasViews.findViewById(id.nameRadioButton));
-        prefNameTextView = ((TextView) hasViews.findViewById(id.prefNameTextView));
         textView = ((TextView) hasViews.findViewById(id.textView));
         myRadioGroup = ((RadioGroup) hasViews.findViewById(id.myRadioGroup));
-        {
-            View view = hasViews.findViewById(id.button);
-            if (view!= null) {
-                view.setOnClickListener(new OnClickListener() {
-
-
-                    @Override
-                    public void onClick(View view) {
-                        MainActivity_.this.button();
-                    }
-
-                }
-                );
-            }
-        }
+        ageRadioButton = ((RadioButton) hasViews.findViewById(id.ageRadioButton));
+        prefNameTextView = ((TextView) hasViews.findViewById(id.prefNameTextView));
+        prefEditText = ((EditText) hasViews.findViewById(id.prefEditText));
         {
             View view = hasViews.findViewById(id.savePrefButton);
             if (view!= null) {
@@ -103,6 +92,21 @@ public final class MainActivity_
                     @Override
                     public void onClick(View view) {
                         MainActivity_.this.savePref();
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            View view = hasViews.findViewById(id.button);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        MainActivity_.this.button();
                     }
 
                 }
@@ -125,6 +129,52 @@ public final class MainActivity_
             }
         }
         afterViews();
+    }
+
+    @Override
+    public void doInUiThread() {
+        handler_.post(new Runnable() {
+
+
+            @Override
+            public void run() {
+                MainActivity_.super.doInUiThread();
+            }
+
+        }
+        );
+    }
+
+    @Override
+    public void afterBackgroundExe(final String result) {
+        handler_.post(new Runnable() {
+
+
+            @Override
+            public void run() {
+                MainActivity_.super.afterBackgroundExe(result);
+            }
+
+        }
+        );
+    }
+
+    @Override
+    public void doInBackGround(final String query) {
+        BackgroundExecutor.execute(new BackgroundExecutor.Task("", 0, "") {
+
+
+            @Override
+            public void execute() {
+                try {
+                    MainActivity_.super.doInBackGround(query);
+                } catch (Throwable e) {
+                    Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+                }
+            }
+
+        }
+        );
     }
 
     public static class IntentBuilder_ {

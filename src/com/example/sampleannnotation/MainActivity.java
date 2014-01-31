@@ -1,13 +1,26 @@
 package com.example.sampleannnotation;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
 
 import android.app.Activity;
+import android.net.http.AndroidHttpClient;
 import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -52,7 +65,7 @@ public class MainActivity extends Activity {
 	void afterViews() {
 		Toast.makeText(this, textView.getText().toString() + " \n起動したよ",
 				Toast.LENGTH_SHORT).show();
-		//spにデータがある場合には起動後、setテキストする。ない場合はデフォルトの値で初期化。
+		// spにデータがある場合には起動後、setテキストする。ない場合はデフォルトの値で初期化。
 		prefAgeTextView.setText(myPrefs.age().getOr(0) + "");
 		prefNameTextView.setText(myPrefs.name().getOr("No Name"));
 	}
@@ -85,10 +98,9 @@ public class MainActivity extends Activity {
 				if (NumberUtils.isNumber(str)) {
 					// spのバッチ処理。editではじめ、関数名、put、関数名,put,,,,, .apply()でコミット。
 					int i = Integer.valueOf(str);
-					myPrefs.edit().age().put(i)
-							.lastUpdated().put(System.currentTimeMillis())
-							.apply();
-					prefAgeTextView.setText( i +"");
+					myPrefs.edit().age().put(i).lastUpdated()
+							.put(System.currentTimeMillis()).apply();
+					prefAgeTextView.setText(i + "");
 				} else {
 					Toast.makeText(MainActivity.this, "ageには数字を入れてください",
 							Toast.LENGTH_SHORT).show();
@@ -100,10 +112,57 @@ public class MainActivity extends Activity {
 			// 値を取得する: long lastUpdated = myPrefs.lastUpdated().get();
 			// 値を読み取り、その値がない場合はgetOrの引数が帰ってくる。
 			// long now = System.currentTimeMillis();
-			// long longlast = myPrefs.lastUpdated().getOr(now);
+			// long longlastUpdated = myPrefs.lastUpdated().getOr(now);
 		} else {
 			Toast.makeText(MainActivity.this, "EditTextに値を入力してください",
 					Toast.LENGTH_SHORT).show();
 		}
+	}
+
+	//uithread側の処理。onpreexeみたいな
+	@UiThread
+	void doInUiThread() {
+		String query = null; //TODO ここにクエリを書く 
+		doInBackGround(query);
+	}
+
+	String result;
+
+	// これでAsynctascの代わりになる
+	@Background
+	void doInBackGround(String query) {
+		AndroidHttpClient client = AndroidHttpClient
+				.newInstance("Android UserAgent");
+		BufferedReader reader = null;
+		StringBuilder builder = new StringBuilder();
+		try {
+			HttpResponse res = client
+					.execute(new HttpGet(
+							"https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + query ));
+			// HttpResponseのEntityデータをStringへ変換
+			reader = new BufferedReader(new InputStreamReader(res.getEntity()
+					.getContent(), "UTF-8"));
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				builder.append(line + "\n");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				reader.close();
+			} catch (IOException e) {
+			}
+		}
+		// resultに入れる
+		result = builder.toString();
+		afterBackgroundExe(result);
+	}
+	
+	//onPostみたいな役割
+	@UiThread
+	void afterBackgroundExe(String result){
+		//検索した文字列の結果をテキストに貼り付けるだけ。
+		textView.setText(result);
 	}
 }
